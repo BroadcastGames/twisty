@@ -49,6 +49,7 @@ import org.brickshadow.roboglk.io.TextBufferIO;
 import org.brickshadow.roboglk.util.UISync;
 import org.brickshadow.roboglk.view.TextBufferView;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -68,6 +69,8 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.preference.PreferenceManager;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -87,6 +90,7 @@ import android.widget.RadioGroup;
 import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.RadioGroup.OnCheckedChangeListener;
+import android.widget.Toast;
 
 public class Twisty extends AppCompatActivity {
 	private static String TAG = "Twisty";
@@ -686,12 +690,58 @@ public class Twisty extends AppCompatActivity {
 	}
 
 
+	// Identifier for the permission request
+	private static final int WRITE_STORAGE_PERMISSIONS_REQUEST = 1;
+
+
+	public boolean getPermissionToUseStorage() {
+		if (ContextCompat.checkSelfPermission(this,
+				Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+
+			if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+					Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+
+			} else {
+				ActivityCompat.requestPermissions(this,
+						new String[] { Manifest.permission.WRITE_EXTERNAL_STORAGE },
+						WRITE_STORAGE_PERMISSIONS_REQUEST);
+
+			}
+			return false;
+		}
+		return true;
+	}
+
+	@Override
+	public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+		switch (requestCode) {
+			case WRITE_STORAGE_PERMISSIONS_REQUEST: {
+				// If request is cancelled, the result arrays are empty.
+				if (grantResults.length > 0
+						&& grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+					Toast.makeText(this, "Write Storage permission granted",
+							Toast.LENGTH_SHORT).show();
+
+				} else {
+					Toast.makeText(this, "Write Storage permission denied",
+							Toast.LENGTH_SHORT).show();
+					// ToDo: use non /sdcard/ path, use application local storage path
+				}
+				return;
+			}
+		}
+	}
+
+
 	// Return the path to the saved-games directory (typically "/sdcard/Twisty/")
 	// If sdcard not present, or if /sdcard/Twisty is a file, return null.
 	private String ensureSavedGamesDir(boolean write) {
+		Log.i(TAG, "permission? " + getPermissionToUseStorage());
+
 		String storagestate = Environment.getExternalStorageState();
 		if (!storagestate.equals(Environment.MEDIA_MOUNTED) &&
 				(write || storagestate.equals(Environment.MEDIA_MOUNTED_READ_ONLY))) {
+			Log.w(TAG, "Storage READ_ONLY or otherwise not mounted");
 			return null;
 		}
 		String sdpath = Environment.getExternalStorageDirectory().getPath();
@@ -731,9 +781,18 @@ public class Twisty extends AppCompatActivity {
 			showDialog(DIALOG_CANT_SAVE);
 			return null;
 		}
-		File gameDirRoot = new File(gamesDirPath);
 		ArrayList<String> zgamelist = new ArrayList<String>();
+		File gameDirRoot = new File(gamesDirPath);
+		Log.i(TAG, "searching file path " + gamesDirPath);
 		scanDir(gameDirRoot, zgamelist);
+
+		// ToDo: implement a preference picker for additional devices, such as USB or network mounted paths
+		File extraDir0 = new File("/sdcard/story000");
+		scanDir(extraDir0, zgamelist);
+		// ToDo: implement a preference picker for additional devices, such as USB or network mounted paths
+		File extraDir1 = new File("/sdcard/Download");
+		scanDir(extraDir1, zgamelist);
+
 		String[] files = zgamelist.toArray(new String[zgamelist.size()]);
 		Arrays.sort(files);
 		return files;
@@ -780,12 +839,16 @@ public class Twisty extends AppCompatActivity {
 		rg.removeAllViews();
 		zgame_paths.clear();
 		int id = 0;
-		for (String path : discovered_zgames) {
-			RadioButton rb = new RadioButton(Twisty.this);
-			rb.setText(new File(path).getName());
-			rg.addView(rb);
-			id = rb.getId();
-			zgame_paths.put(id, path);
+		// Restarting app found null. Rotate while picking game also causes crash here, check for null.
+		// ToDo: review logic of population. Now app is not crashing, but if you rotate while picking the list empties.
+		if (discovered_zgames != null) {
+			for (String path : discovered_zgames) {
+				RadioButton rb = new RadioButton(Twisty.this);
+				rb.setText(new File(path).getName());
+				rg.addView(rb);
+				id = rb.getId();
+				zgame_paths.put(id, path);
+			}
 		}
 	}
 
