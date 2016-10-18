@@ -202,9 +202,7 @@ public class Twisty extends AppCompatActivity {
 	@Override
 	public void onCreate(Bundle icicle) {
 		super.onCreate(icicle);
-		// requestWindowFeature(Window.FEATURE_NO_TITLE);
-		requestWindowFeature(Window.FEATURE_ACTION_BAR);
-		
+
 		// Map our built-in game resources to real filenames
 		builtinGames.clear();
 		builtinGames.put(R.raw.violet, "violet.z8");
@@ -605,7 +603,6 @@ public class Twisty extends AppCompatActivity {
 		menu.add(MENUGROUP_RUNNING, MENU_STOP, 1, "Stop").setShortcut('9', 's');
 		menu.add(MENUGROUP_RUNNING, MENU_PICK_SETTINGS, 2, "Settings").setShortcut('4', 's');
 
-		Log.d(TAG, "menu onCreateOptionsMenu");
 		return super.onCreateOptionsMenu(menu);
 	}
 
@@ -614,7 +611,6 @@ public class Twisty extends AppCompatActivity {
 	{
 		menu.setGroupVisible(MENUGROUP_SELECT, !terpIsRunning());
 		menu.setGroupVisible(MENUGROUP_RUNNING, terpIsRunning());
-		Log.d(TAG, "menu onPrepareOptionsMenu");
 		return super.onPrepareOptionsMenu(menu);
 	}
 
