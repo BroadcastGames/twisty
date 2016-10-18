@@ -68,6 +68,7 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.preference.PreferenceManager;
+import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.SparseArray;
@@ -87,7 +88,7 @@ import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.RadioGroup.OnCheckedChangeListener;
 
-public class Twisty extends Activity {
+public class Twisty extends AppCompatActivity {
 	private static String TAG = "Twisty";
 
 	private static final int MENU_PICK_FILE = 101;
@@ -449,6 +450,7 @@ public class Twisty extends Activity {
 	               terp_handler.sendMessage(m);
 	            }
 	        });
+		terpThread.setName("terpThread");
 		terpThread.start();
 		gameIsRunning = true;
 	}
@@ -602,7 +604,8 @@ public class Twisty extends Activity {
 		menu.add(MENUGROUP_RUNNING, MENU_RESTART, 0, "Restart").setShortcut('7', 'r');
 		menu.add(MENUGROUP_RUNNING, MENU_STOP, 1, "Stop").setShortcut('9', 's');
 		menu.add(MENUGROUP_RUNNING, MENU_PICK_SETTINGS, 2, "Settings").setShortcut('4', 's');
-		
+
+		Log.d(TAG, "menu onCreateOptionsMenu");
 		return super.onCreateOptionsMenu(menu);
 	}
 
@@ -611,6 +614,7 @@ public class Twisty extends Activity {
 	{
 		menu.setGroupVisible(MENUGROUP_SELECT, !terpIsRunning());
 		menu.setGroupVisible(MENUGROUP_RUNNING, terpIsRunning());
+		Log.d(TAG, "menu onPrepareOptionsMenu");
 		return super.onPrepareOptionsMenu(menu);
 	}
 
