@@ -336,6 +336,7 @@ gidispatch_function_t *gidispatch_get_function_by_id(glui32 id)
 
 char *gidispatch_prototype(glui32 funcnum)
 {
+	LOGD("gidispatch_prototype gididispatch_call 0x%04x", funcnum);
     switch (funcnum) {
         case 0x0001: /* exit */
             return "0:";
@@ -562,6 +563,8 @@ char *gidispatch_prototype(glui32 funcnum)
 
 void gidispatch_call(glui32 funcnum, glui32 numargs, gluniversal_t *arglist)
 {
+    LOGV("gidispatch_call funcnum 0x%04x numargs %d", funcnum, numargs);
+
     switch (funcnum) {
         case 0x0001: /* exit */
             glk_exit();

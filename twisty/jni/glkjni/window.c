@@ -362,6 +362,8 @@ static int gli_window_open_validate(winid_t splitwin, glui32 method,
 static int jni_open_window(winid_t splitwin, glui32 method, jint size,
         glui32 wintype, jobject *jnewwin, jobject *jpairwin)
 {
+    LOGI("jni_open_window size %d wintype %d", size, wintype);
+
     jobject jsplitwin = (gli_rootwin ? splitwin->jwin : NULL);
     jobjectArray jwins;
 
@@ -396,12 +398,14 @@ static int jni_open_window(winid_t splitwin, glui32 method, jint size,
     }
 
     DELETE_LOCAL(jwins);
+    LOGI("jni_open_window size %d wintype %d RETURNING TRUE", size, wintype);
     return TRUE;
 
 whoops1:
     DELETE_LOCAL(*jnewwin);
 whoops2:
     DELETE_LOCAL(jwins);
+    LOGW("jni_open_window size %d wintype %d RETURNING FALSE", size, wintype);
     return FALSE;
 }
 
@@ -412,6 +416,7 @@ whoops2:
 static winid_t gli_window_open(winid_t splitwin, glui32 method, jint size,
         glui32 wintype, glui32 rock, jobject jnewwin, jobject jpairwin)
 {
+    LOGI("gli_window_open size %d wintype %d rock %d", size, wintype, rock);
     window_t *newwin, *pairwin;
 
     newwin = gli_register_window(wintype, rock, jnewwin);
@@ -458,6 +463,7 @@ winid_t glk_window_open(winid_t splitwin, glui32 method, glui32 size,
 
     if (!jni_open_window(splitwin, method, (jint)size, wintype,
             &jnewwin, &jpairwin)) {
+        LOGW("glk_window_open RETURN point C");
         return NULL;
     }
 

@@ -92,13 +92,37 @@ public class GlkLayout extends LinearLayout {
 	private GlkWindow[] makeNewWindow(GlkWindow splitWin,
 			GlkWinDirection direction, GlkWinDivision sizeMethod,
 			int size, GlkWinType winType, final int id) {
+
+		// TODO(gmadrid-refactor): fix this when you move to multi windows.
+		Log.d(TAG, "No child windows yet. SKIPPING. direction " + direction + " sizeMethod " + sizeMethod + " size " + size + " winType " + winType + " id " + id);
+
+		GlkWindow wnd = null;
+		switch (winType.toString())
+		{
+			case "TextBuffer":
+				Log.i(TAG, "makeNewWindow TextBuffer");
+
+				// Took this logic from makeNewRootWindow
+				wnd =  winType.newWindow(this, id);
+
+				// return splitWin.makeNewChildWindow(direction, sizeMethod,
+				//	size, winType, id);
+				break;
+		}
+
 		if (splitWin == null) {
+			// If there is no root window, create one.
+			Log.w(TAG, "makeNewWindow is returning NewRootWindow");
 			return makeNewRootWindow(winType, id);
 		}
-		
-		// TODO(gmadrid-refactor): fix this when you move to multi windows.
-		Log.d(TAG, "No child windows yet. SKIPPING.");
-		return new GlkWindow[] { null, null };
+		else
+		{
+			//  No child windows yet. SKIPPING. direction Right sizeMethod Proportional size 33 winType TextBuffer id 2
+			GlkPairWindow w = new GlkPairWindow();
+			return new GlkWindow[] { splitWin, wnd };
+		}
+
+		// return new GlkWindow[] { null, null };
 		//return splitWin.makeNewChildWindow(direction, sizeMethod,
 			//	size, winType, id);
 	}
