@@ -241,7 +241,8 @@ frefid_t glk_fileref_create_by_name(glui32 usage, char *name, glui32 rock)
 
 done:
     if (file) {
-        DELETE_LOCAL(file);
+        LOGW("glkjni fileref.c DELETE_LOCAL(file) disabled to prevent crash.");
+        // DELETE_LOCAL(file);
     }
     if (!fref) {
         gli_strict_warning("fileref_create_by_name: unable to create fileref");

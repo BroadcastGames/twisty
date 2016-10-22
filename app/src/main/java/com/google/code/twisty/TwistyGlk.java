@@ -87,7 +87,15 @@ public class TwistyGlk implements Glk {
 
     @Override
     public File namedFile(String filename, int usage) {
-        return null;
+        Log.w(TAG, "git namedFile " + filename + " usage " + usage);
+        // ToDo: establish sandbox convention for these named files, and security check their path for non ../ escapes?
+        File targetFile = new File("/sdcard/story000/gamerun0/" + filename);
+        if (! targetFile.canWrite())
+        {
+            Log.w(TAG, "git namedFile " + targetFile + " NOT WRITABLE");
+        }
+        return targetFile;
+        // return null;
     }
 
     @Override
@@ -98,40 +106,42 @@ public class TwistyGlk implements Glk {
 
     @Override
     public File promptFile(int usage, int fmode) {
-    	// This "terp thread" isn't allowed to inflate dialogs directly;
-    	// only the main Twisty UI thread can do that.  So we use the twistyHandler
-    	// to send a TwistyMessage to Twisty, and let it do the prompting.
-    	TwistyMessage msg = new TwistyMessage();
+        // This "terp thread" isn't allowed to inflate dialogs directly;
+        // only the main Twisty UI thread can do that.  So we use the twistyHandler
+        // to send a TwistyMessage to Twisty, and let it do the prompting.
+        TwistyMessage msg = new TwistyMessage();
         msg.path = "";
 
         // Ask Twisty to prompt the user, then block until we're notify()'d.
         // (We're blocking on the glkLayout just because it's a shared object.)
         if ((fmode & GlkFileMode.Read) == GlkFileMode.Read) {
-        	 synchronized (glkLayout) {
-             	try {
-             		Message.obtain(twistyHandler, Twisty.PROMPT_FOR_READFILE, msg).sendToTarget();
-             		glkLayout.wait();
-             	}
-             	catch (Exception e) {
-             		return null; //  failure
-             	}
-             }
+            synchronized (glkLayout) {
+                try {
+                    Message.obtain(twistyHandler, Twisty.PROMPT_FOR_READFILE, msg).sendToTarget();
+                    glkLayout.wait();
+                }
+                catch (Exception e) {
+                    Log.e(TAG, "Exception in promptFile ", e);
+                    return null; //  failure
+                }
+            }
         }
         else if ((fmode & GlkFileMode.Write) == GlkFileMode.Write) {
-       	 synchronized (glkLayout) {
-            	try {
-            		Message.obtain(twistyHandler, Twisty.PROMPT_FOR_WRITEFILE, msg).sendToTarget();
-            		glkLayout.wait();
-            	}
-            	catch (Exception e) {
-            		return null; //  failure
-            	}
+            synchronized (glkLayout) {
+                try {
+                    Message.obtain(twistyHandler, Twisty.PROMPT_FOR_WRITEFILE, msg).sendToTarget();
+                    glkLayout.wait();
+                }
+                catch (Exception e) {
+                    Log.e(TAG, "Exception in promptFile ", e);
+                    return null; //  failure
+                }
             }
         }
         else {
-        	return null;
+            return null;
         }
-        
+
         // Twisty should have modified our TwistyMessage object, and
         // then called notify() to wake us up.
         return new File(msg.path);
