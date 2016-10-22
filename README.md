@@ -2,7 +2,7 @@ Twisty, a text-adventure interpreter for Android.
 -------------------------------------------------
 
 
-This is a fork of https://github.com/sussman/twisty with the intention of building on Android SDK 24 with source code layout of a new Android Studio 2.2.1 project.
+This is a fork of https://github.com/sussman/twisty with the intention of building on Android SDK 24 with source code layout of a new Android Studio 2.2.2 project.
 
 1. The library was consolidated into the app tree. It was a clean branch of Java code not shared by any other projects and it was a shortcut taken in migrating to Android Studio. It should be easy enough to move it back to a library.
 2. The menu did not appear when targeting SDK 24. A quick fix was to change the Twisty.java class from "Activity" to "AppCompatActivity". There may be more issues related to migration to newer SDK, but so far, this seemed to work.
