@@ -443,14 +443,22 @@ public class Twisty extends AppCompatActivity {
 	            		   // cursesFile.getAbsolutePath()};
 	        	   String[] args = new String[] {"git", gamePath};
 	               int res = -1;
-	               if (GlkFactory.startup(glk, args)) {
-	                   res = GlkFactory.run();
-	               }
-	               GlkFactory.shutdown();
-	               Message m = terp_handler.obtainMessage();
-	               m.arg1 = res;
-	               terp_handler.sendMessage(m);
-	            }
+				   Log.i(TAG, "Getting ready to launch, params " + Arrays.toString(args) + " " + Thread.currentThread());
+				   try {
+					   if (GlkFactory.startup(glk, args)) {
+						   res = GlkFactory.run();
+					   }
+					   GlkFactory.shutdown();
+					   Message m = terp_handler.obtainMessage();
+					   m.arg1 = res;
+					   terp_handler.sendMessage(m);
+				   }
+				   catch (Exception e)
+				   {
+					   Log.e(TAG, "Exception running game ", e);
+				   }
+				   Log.i(TAG, "Thread run ending, params " + Arrays.toString(args) + " " + Thread.currentThread());
+			   }
 	        });
 		terpThread.setName("terpThread");
 		terpThread.start();
@@ -580,7 +588,7 @@ public class Twisty extends AppCompatActivity {
 
 
 	private boolean terpIsRunning() {
-		Log.i(TAG, "Query whether game is running!");
+		Log.i(TAG, "Query weather game is running!");
 		return gameIsRunning;
 	}
 	
@@ -757,19 +765,30 @@ public class Twisty extends AppCompatActivity {
 
 	// Helper for scanForZGames():
 	//   Walk DIR recursively, adding any file matching *.z[1-8] or *.gblorb to LIST.
+	// ToDo: make this an array of patterns to match and use that instead of this compound if statement?
 	private void scanDir(File dir, ArrayList<String> list) {
 		File[] children = dir.listFiles();
+
 		if (children == null)
 			return;
+
 		for (int count = 0; count < children.length; count++) {
-			File child = children[count];
-			if (child.isFile() &&
-					(child.getName().matches("[^.].*\\.[Zz][1-8]") ||
-					 child.getName().endsWith(".gblorb") ||
-					 child.getName().endsWith(".ulx")))
-				list.add(child.getPath());
-			else
+			final File child = children[count];
+			if (child.isFile()) {
+				final String name = child.getName();
+
+				if (	name.endsWith(".gblorb") ||
+						name.endsWith(".ulx") ||
+						name.endsWith(".blb") ||
+						// do regex last for performance
+						name.matches("[^.].*\\.[Zz][1-8]")
+					)
+				{
+					list.add(child.getPath());
+				};
+			} else {
 				scanDir(child, list);
+			}
 		}
 	}
 
@@ -787,9 +806,9 @@ public class Twisty extends AppCompatActivity {
 		scanDir(gameDirRoot, zgamelist);
 
 		// ToDo: implement a preference picker for additional devices, such as USB or network mounted paths
+		// ToDo: crawl subfolders, walk tree
 		File extraDir0 = new File("/sdcard/story000");
 		scanDir(extraDir0, zgamelist);
-		// ToDo: implement a preference picker for additional devices, such as USB or network mounted paths
 		File extraDir1 = new File("/sdcard/Download");
 		scanDir(extraDir1, zgamelist);
 
