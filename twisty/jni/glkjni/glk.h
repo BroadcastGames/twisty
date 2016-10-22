@@ -44,6 +44,26 @@ typedef struct glk_stream_struct  *strid_t;
 typedef struct glk_fileref_struct *frefid_t;
 typedef struct glk_schannel_struct *schanid_t;
 
+
+#include <android/log.h>
+
+#define LOGW(...) __android_log_print(ANDROID_LOG_WARN   , "Twisty", __VA_ARGS__)
+#define LOGE(...) __android_log_print(ANDROID_LOG_ERROR  , "Twisty", __VA_ARGS__)
+
+#define DEBUG_LOGGING
+#ifdef DEBUG_LOGGING
+#define LOGV(...) __android_log_print(ANDROID_LOG_VERBOSE, "Twisty", __VA_ARGS__)
+#define LOGD(...) __android_log_print(ANDROID_LOG_DEBUG  , "Twisty", __VA_ARGS__)
+#define LOGI(...) __android_log_print(ANDROID_LOG_INFO   , "Twisty", __VA_ARGS__)
+#define LOG(...)  __android_log_print(ANDROID_LOG_DEBUG  , "Twisty", __VA_ARGS__)
+#else
+#define LOGV(...)
+#define LOGD(...)
+#define LOGI(...)
+#define LOG(...)
+#endif
+
+
 #define gestalt_Version (0)
 #define gestalt_CharInput (1)
 #define gestalt_LineInput (2)

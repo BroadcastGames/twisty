@@ -183,7 +183,9 @@ frefid_t glk_fileref_create_temp(glui32 usage, glui32 rock)
 
 done:
     if (file) {
-        DELETE_LOCAL(file);
+        LOGW("glkjni fileref.c skipping DELETE_LOCAL(file), ToDo: resolve this. Without this hack, Counterfeit Monkey crashes.");
+        // Is the issue that a java FILE object is being used to delete from C code?
+        // DELETE_LOCAL(file);
     }
     if (!fref) {
         gli_strict_warning("fileref_create_temp: unable to create fileref.");

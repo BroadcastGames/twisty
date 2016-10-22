@@ -744,7 +744,7 @@ public class Twisty extends AppCompatActivity {
 	// Return the path to the saved-games directory (typically "/sdcard/Twisty/")
 	// If sdcard not present, or if /sdcard/Twisty is a file, return null.
 	private String ensureSavedGamesDir(boolean write) {
-		Log.i(TAG, "permission? " + getPermissionToUseStorage());
+		Log.i(TAG, "getPermissionToUseStorage permission? " + getPermissionToUseStorage());
 
 		String storagestate = Environment.getExternalStorageState();
 		if (!storagestate.equals(Environment.MEDIA_MOUNTED) &&
