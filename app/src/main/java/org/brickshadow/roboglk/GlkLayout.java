@@ -88,7 +88,7 @@ public class GlkLayout extends LinearLayout {
 		return runner.newWins;
 	}
 	
-	
+	// method is called open on other implementations
 	private GlkWindow[] makeNewWindow(GlkWindow splitWin,
 			GlkWinDirection direction, GlkWinDivision sizeMethod,
 			int size, GlkWinType winType, final int id) {
@@ -96,6 +96,24 @@ public class GlkLayout extends LinearLayout {
 		// TODO(gmadrid-refactor): fix this when you move to multi windows.
 		Log.d(TAG, "No child windows yet. SKIPPING. direction " + direction + " sizeMethod " + sizeMethod + " size " + size + " winType " + winType + " id " + id);
 
+
+		if (splitWin == null) {
+			// If there is no root window, create one.
+			Log.w(TAG, "makeNewWindow found no RootWindow, is returning NewRootWindow");
+			return makeNewRootWindow(winType, id);
+		}
+		else
+		{
+			return doLayoutTry1(splitWin, winType, id);
+		}
+
+		// return new GlkWindow[] { null, null };
+		//return splitWin.makeNewChildWindow(direction, sizeMethod,
+			//	size, winType, id);
+	}
+
+	private GlkWindow[] doLayoutTry1(GlkWindow splitWin, GlkWinType winType, final int id)
+	{
 		GlkWindow wnd = null;
 		switch (winType.toString())
 		{
@@ -105,26 +123,18 @@ public class GlkLayout extends LinearLayout {
 				// Took this logic from makeNewRootWindow
 				wnd =  winType.newWindow(this, id);
 
+				addView(wnd.getView());
+
+				//GlkPairWindow newParent = new GlkPairWindow();
+
 				// return splitWin.makeNewChildWindow(direction, sizeMethod,
 				//	size, winType, id);
 				break;
 		}
 
-		if (splitWin == null) {
-			// If there is no root window, create one.
-			Log.w(TAG, "makeNewWindow is returning NewRootWindow");
-			return makeNewRootWindow(winType, id);
-		}
-		else
-		{
-			//  No child windows yet. SKIPPING. direction Right sizeMethod Proportional size 33 winType TextBuffer id 2
-			GlkPairWindow w = new GlkPairWindow();
-			return new GlkWindow[] { splitWin, wnd };
-		}
-
-		// return new GlkWindow[] { null, null };
-		//return splitWin.makeNewChildWindow(direction, sizeMethod,
-			//	size, winType, id);
+		//  No child windows yet. SKIPPING. direction Right sizeMethod Proportional size 33 winType TextBuffer id 2
+		// GlkPairWindow w = new GlkPairWindow();
+		return new GlkWindow[] { splitWin, wnd };
 	}
 	
 	private GlkWindow[] makeNewRootWindow(GlkWinType winType, int id) {
