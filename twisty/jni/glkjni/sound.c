@@ -162,9 +162,15 @@ glui32 glk_schannel_get_rock(schannel_t *chan)
     return chan->rock;
 }
 
-glui32 glk_schannel_play(schannel_t *chan, glui32 snd)
+void glk_schannel_stop(schannel_t *chan)
 {
-    return glk_schannel_play_ext(chan, snd, 1, 0);
+    if (!chan) {
+        gli_strict_warning("schannel_stop: invalid id.");
+        return;
+    }
+    (*jni_env)->CallVoidMethod(
+            INSTANCE_M(chan->jchan, GLKCHANNEL_STOP));
+    jni_check_exc();
 }
 
 glui32 glk_schannel_play_ext(schannel_t *chan, glui32 snd, glui32 repeats,
@@ -208,16 +214,12 @@ glui32 glk_schannel_play_ext(schannel_t *chan, glui32 snd, glui32 repeats,
     return res;
 }
 
-void glk_schannel_stop(schannel_t *chan)
+glui32 glk_schannel_play(schannel_t *chan, glui32 snd)
 {
-    if (!chan) {
-        gli_strict_warning("schannel_stop: invalid id.");
-        return;
-    }
-    (*jni_env)->CallVoidMethod(
-            INSTANCE_M(chan->jchan, GLKCHANNEL_STOP));
-    jni_check_exc();
+    return glk_schannel_play_ext(chan, snd, 1, 0);
 }
+
+
 
 void glk_schannel_set_volume(schannel_t *chan, glui32 vol)
 {
