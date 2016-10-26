@@ -6,6 +6,7 @@ import org.brickshadow.roboglk.util.GlkEventQueue;
 import org.brickshadow.roboglk.util.UISync;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.util.Log;
 import android.widget.LinearLayout;
 
@@ -104,12 +105,39 @@ public class GlkLayout extends LinearLayout {
 		}
 		else
 		{
-			return doLayoutTry1(splitWin, winType, id);
+			// return doLayoutTry1(splitWin, winType, id);
+			return doLayoutTry2(splitWin, winType, id);
 		}
 
 		// return new GlkWindow[] { null, null };
 		//return splitWin.makeNewChildWindow(direction, sizeMethod,
 			//	size, winType, id);
+	}
+
+	private GlkWindow[] doLayoutTry2(GlkWindow splitWin, GlkWinType winType, final int id)
+	{
+		GlkWindow wnd = null;
+		switch (winType.toString())
+		{
+			case "TextBuffer":
+				Log.i(TAG, "makeNewWindow TextBuffer");
+
+				// Took this logic from makeNewRootWindow
+				wnd =  winType.newWindow(this, id);
+
+				wnd.getView().setBackgroundColor(Color.RED);
+				addView(wnd.getView());
+
+				//GlkPairWindow newParent = new GlkPairWindow();
+
+				// return splitWin.makeNewChildWindow(direction, sizeMethod,
+				//	size, winType, id);
+				break;
+		}
+
+		//  No child windows yet. SKIPPING. direction Right sizeMethod Proportional size 33 winType TextBuffer id 2
+		// GlkPairWindow w = new GlkPairWindow();
+		return new GlkWindow[] { splitWin, wnd };
 	}
 
 	private GlkWindow[] doLayoutTry1(GlkWindow splitWin, GlkWinType winType, final int id)

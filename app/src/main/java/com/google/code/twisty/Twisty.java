@@ -806,7 +806,6 @@ public class Twisty extends AppCompatActivity {
 		scanDir(gameDirRoot, zgamelist);
 
 		// ToDo: implement a preference picker for additional devices, such as USB or network mounted paths
-		// ToDo: crawl subfolders, walk tree
 		File extraDir0 = new File("/sdcard/story000/Glulx_Tests0");
 		scanDir(extraDir0, zgamelist);
 		File extraDir1 = new File("/sdcard/story000/setZ");

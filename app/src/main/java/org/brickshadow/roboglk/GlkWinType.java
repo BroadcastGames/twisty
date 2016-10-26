@@ -22,6 +22,7 @@ import org.brickshadow.roboglk.io.TextBufferIO;
 import org.brickshadow.roboglk.view.TextBufferView;
 
 import android.app.Activity;
+import android.util.Log;
 
 
 /**
@@ -84,6 +85,8 @@ public abstract class GlkWinType {
 			
 			// TODO(gmadrid-refactor): figure out a better way to do this assignment.
 			result.view = view;
+
+			Log.i("GlkWinType", "just created GLwinType GlkTextBufferWindow");
 			
 			return result;
 		}
