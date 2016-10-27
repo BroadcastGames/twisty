@@ -15,5 +15,5 @@ ToDo
 -------------------------------------------------
 The NDK is not integrated with gradle currently.
 
-Android Studio 2.2.1 expects the lib files to be in app/src/main/jniLibs tree to be bundled into the APK.
+NOTE: Android Studio 2.2.2 expects the lib files to be in app/src/main/jniLibs tree to be bundled into the APK. I currently manually copy them into that folder after a successful NDK compile.
 
