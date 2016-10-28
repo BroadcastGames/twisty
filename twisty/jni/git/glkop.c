@@ -357,6 +357,7 @@ glui32 git_perform_glk(glui32 funcnum, glui32 numargs, glui32 *arglist)
   case 0x0128: /* put_char_uni */
     if (numargs != 1)
       goto WrongArgNum;
+    LOGV("git/glkop.c 0x0128 put_char_uni %d", arglist[0]);
     glk_put_char_uni(arglist[0]);
     break;
   case 0x012B: /* put_char_stream_uni */

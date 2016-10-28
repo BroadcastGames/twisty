@@ -829,6 +829,7 @@ do_tailcall:
         while (L2 != 0)
         {
 #ifdef GLK_MODULE_UNICODE
+            LOGV("git/terp.c glk_put_char_uni SPOTA %d", (glui32) L2);
             glk_put_char_uni ((glui32) L2);
 #else
             unsigned char c = (L2 > 0 && L2 < 256) ? L2 : '?';
@@ -925,6 +926,7 @@ do_tailcall:
                 else if (ioMode == IO_GLK)
                 {
 #ifdef GLK_MODULE_UNICODE
+                    LOGV("git/terp.c glk_put_char_uni SPOTB %d", memRead32(L1));
                     glk_put_char_uni (memRead32(L1));
 #else
                     git_uint32 c = memRead32(L1);
@@ -1084,6 +1086,7 @@ do_tailcall:
         else if (ioMode == IO_GLK)
         {
 #ifdef GLK_MODULE_UNICODE
+            LOGV("git/terp.c glk_put_char_uni SPOTC %d", (glui32) L1);
             glk_put_char_uni ((glui32) L1);
 #else
             unsigned char c = (L1 > 0 && L1 < 256) ? L1 : '?';

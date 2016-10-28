@@ -493,17 +493,20 @@ void gli_put_char(stream_t *str, glui32 ch)
     } else if (str->type == strtype_File) {
         fstream_putc(str->data, ch);
     } else if (str->type == strtype_Window) {
+        LOGV("stream.c gli_put_char to gli_window_putc");
         gli_window_putc(str->data, ch);
     }
 }
 
 void glk_put_char(unsigned char ch)
 {
+    LOGV("stream.c GLK glk_put_char");
     gli_put_char(gli_currentstr, ch);
 }
 
 void glk_put_char_uni(glui32 ch)
 {
+    LOGV("stream.c GLK glk_put_char_uni ch %d", ch);
     gli_put_char(gli_currentstr, ch);
 }
 
@@ -544,6 +547,7 @@ void gli_put_buffer(stream_t *str, char *buf, glui32 len)
 
 void glk_put_buffer(char *buf, glui32 len)
 {
+    LOGV("stream.c GLK glk_put_buffer");
     gli_put_buffer(gli_currentstr, buf, len);
 }
 
@@ -575,6 +579,7 @@ void gli_put_buffer_uni(stream_t *str, glui32 *buf, glui32 len)
 
 void glk_put_buffer_uni(glui32 *buf, glui32 len)
 {
+    LOGV("stream.c GLK glk_put_buffer_uni");
     gli_put_buffer_uni(gli_currentstr, buf, len);
 }
 

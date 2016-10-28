@@ -111,7 +111,7 @@ void gli_window_print(window_t *win)
         return;
     }
 
-    LOGD("win_txt.c calling print '%s' len %d", text->outbuf, text->outbuf_count);
+    LOGD("win_txt.c calling Java print '%s' len %d", text->outbuf, text->outbuf_count);
 
     jstr = (*jni_env)->NewString(jni_env, text->outbuf, text->outbuf_count);
     (*jni_env)->CallVoidMethod(WIN_M(win->jwin, PRINT), jstr);
@@ -124,6 +124,7 @@ void gli_window_print(window_t *win)
 static void gli_window_buffer_char(window_t *win, glui32 ch)
 {
     if (win->text->outbuf_count > OUTBUFCHARS - 2) {
+        LOGV("win_txt.c gli_window_buffer_char calling central gli_window_print print char %d", ch);
         gli_window_print(win);
     }
     if (ch > 0xFFFF) {
@@ -153,6 +154,7 @@ void gli_window_write(window_t *win, char *buf, glui32 len)
     }
 
     for (i = 0; i < len; i++) {
+        LOGV("win_txt.c gli_window_write calling gli_window_buffer_char with '%s' len %d", *buf, len);
         gli_window_buffer_char(win, (unsigned char)buf[i]);
     }
 
@@ -194,6 +196,7 @@ void gli_window_putc(window_t *win, glui32 ch)
         return;
     }
 
+    LOGV("win_txt.c gli_window_putc calling gli_window_buffer_char with char'%c' code %d", (char) ch, ch);
     gli_window_buffer_char(win, ch);
 
     if (win->echostr) {
