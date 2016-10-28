@@ -128,14 +128,17 @@ static void gli_window_buffer_char(window_t *win, glui32 ch)
         gli_window_print(win);
     }
     if (ch > 0xFFFF) {
+        LOGV("win_txt.c gli_window_buffer_char calling central gli_window_print print char %d BRANCH_A00", ch);
         jchar surr1, surr2;
 
+        // ToDo: comment code. What is this magic doing to UTF-8?
         ch -= 0x10000;
         surr1 = 0xD800 | (ch >> 10);
         surr2 = 0xDC00 | (ch & 0x3FF);
         (win->text->outbuf)[win->text->outbuf_count++] = surr1;
         (win->text->outbuf)[win->text->outbuf_count++] = surr2;
     } else {
+        LOGV("win_txt.c gli_window_buffer_char calling central gli_window_print print char %d BRANCH_A01", ch);
         (win->text->outbuf)[win->text->outbuf_count++] = (jchar)ch;
     }
 }
@@ -196,7 +199,7 @@ void gli_window_putc(window_t *win, glui32 ch)
         return;
     }
 
-    LOGV("win_txt.c gli_window_putc calling gli_window_buffer_char with char'%c' code %d", (char) ch, ch);
+    LOGV("win_txt.c gli_window_putc calling gli_window_buffer_char with char '%c' code %d", (char) ch, ch);
     gli_window_buffer_char(win, ch);
 
     if (win->echostr) {

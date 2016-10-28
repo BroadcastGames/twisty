@@ -483,6 +483,7 @@ glui32 glk_get_line_stream_uni(strid_t str, glui32 *buf, glui32 len)
 
 void gli_put_char(stream_t *str, glui32 ch)
 {
+    LOGV("stream.c gli_put_char SPOT_Z0 ch %d", ch);
     if (!str || !str->writable)
         return;
 
@@ -493,7 +494,7 @@ void gli_put_char(stream_t *str, glui32 ch)
     } else if (str->type == strtype_File) {
         fstream_putc(str->data, ch);
     } else if (str->type == strtype_Window) {
-        LOGV("stream.c gli_put_char to gli_window_putc");
+        LOGV("stream.c gli_put_char to gli_window_putc SPOT_Z1");
         gli_window_putc(str->data, ch);
     }
 }
