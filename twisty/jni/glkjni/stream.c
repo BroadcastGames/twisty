@@ -489,6 +489,7 @@ void gli_put_char(stream_t *str, glui32 ch)
 
     str->writecount++;
 
+    // Does the order of the if statements impact performance? do Window first, most common?
     if (str->type == strtype_Memory) {
         mstream_putc(str->data, ch);
     } else if (str->type == strtype_File) {

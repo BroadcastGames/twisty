@@ -123,12 +123,14 @@ void gli_window_print(window_t *win)
 
 static void gli_window_buffer_char(window_t *win, glui32 ch)
 {
+    // - 2 value comes from possible double-jchar entry of value greater than 0xFFFF
     if (win->text->outbuf_count > OUTBUFCHARS - 2) {
         LOGV("win_txt.c gli_window_buffer_char calling central gli_window_print print char %d", ch);
         gli_window_print(win);
     }
+
     if (ch > 0xFFFF) {
-        LOGV("win_txt.c gli_window_buffer_char calling central gli_window_print print char %d BRANCH_A00", ch);
+        LOGV("win_txt.c gli_window_buffer_char buffering char %d BRANCH_A00", ch);
         jchar surr1, surr2;
 
         // ToDo: comment code. What is this magic doing to UTF-8?
