@@ -34,6 +34,7 @@ typedef int32_t glsi32;
 //#define GLK_MODULE_SOUND
 //#define GLK_MODULE_SOUND2
 #define GLK_MODULE_HYPERLINKS
+// Twisty does not seem to implement DATETIME
 //#define GLK_MODULE_DATETIME
 //#define GLK_MODULE_RESOURCE_STREAM
 

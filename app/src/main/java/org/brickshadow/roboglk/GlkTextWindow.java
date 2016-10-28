@@ -26,6 +26,7 @@ import org.brickshadow.roboglk.util.GlkEventQueue;
 import org.brickshadow.roboglk.util.UISync;
 
 import android.app.Activity;
+import android.util.Log;
 import android.view.KeyEvent;
 
 
@@ -247,6 +248,7 @@ public abstract class GlkTextWindow extends GlkWindow {
 
 	@Override
 	public void print(final String str) {
+        Log.d("GlkTextWindow", "print " + str);
 		activity.runOnUiThread(new Runnable() {
             @Override
             public void run() {

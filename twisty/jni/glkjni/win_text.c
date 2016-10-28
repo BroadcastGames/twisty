@@ -111,6 +111,8 @@ void gli_window_print(window_t *win)
         return;
     }
 
+    LOGD("win_txt.c calling print '%s' len %d", text->outbuf, text->outbuf_count);
+
     jstr = (*jni_env)->NewString(jni_env, text->outbuf, text->outbuf_count);
     (*jni_env)->CallVoidMethod(WIN_M(win->jwin, PRINT), jstr);
     DELETE_LOCAL(jstr);
