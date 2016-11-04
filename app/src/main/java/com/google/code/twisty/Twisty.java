@@ -64,10 +64,12 @@ import android.content.res.Resources;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.BatteryManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
+import android.os.Process;
 import android.preference.PreferenceManager;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -206,6 +208,14 @@ public class Twisty extends AppCompatActivity {
 	@Override
 	public void onCreate(Bundle icicle) {
 		super.onCreate(icicle);
+
+		Log.i(TAG, "onCreate " + System.getProperty("os.arch"));
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+			Log.i(TAG, "onCreate getApplicationInfo().nativeLibraryDir: " + getApplicationInfo().nativeLibraryDir + " is64Bit? " + Process.is64Bit());
+		}
+
+		String gameVirtualMachinePath = getApplicationInfo().nativeLibraryDir;
+		Log.i(TAG, "onCreate gameVirtualMachinePath: " + gameVirtualMachinePath);
 
 		// Map our built-in game resources to real filenames
 		builtinGames.clear();
