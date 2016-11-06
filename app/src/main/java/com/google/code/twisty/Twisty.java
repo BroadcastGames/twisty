@@ -829,6 +829,34 @@ public class Twisty extends AppCompatActivity {
 		File extraDir5 = new File("/sdcard/Download");
 		scanDir(extraDir5, zgamelist);
 
+		// Grafted logic in from Son of Hunkypunk Experimental
+		if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.KITKAT) {
+			// passing in null gives root?
+			File[] additionsList = getExternalFilesDirs(null);
+
+			for (int i = 0; i < additionsList.length; i++) {
+				//Huawei Y538 Android 5.1.1 crashed here without this null check
+				if (additionsList[i] != null) {
+					Log.i("AppStartupCommonA", "Paths.java related, post-KITKAT getExternalFilesDirs " + additionsList[i]);
+					scanDir(additionsList[i], zgamelist);
+					// Now, can we get this as the root of an SD Card mounted (or USB mounted)?
+					String workPath = additionsList[i].getPath();
+					if (!workPath.startsWith("/storage/emulated")) {
+						if (workPath.length() >= "/storage/DEAD-BEEF/".length()) {
+							if (workPath.charAt(13) == '-') {
+								if (workPath.charAt(18) == '/') {
+									String workPathRoot = workPath.substring(0, 18);
+									Log.i("AppStartupCommonA", "Paths.java related, post-KITKAT getExternalFilesDirs TARGET MATCH " + workPath + " to " + workPathRoot);
+									scanDir(new File(workPathRoot), zgamelist);
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+
+
 		String[] files = zgamelist.toArray(new String[zgamelist.size()]);
 		Arrays.sort(files);
 		return files;
