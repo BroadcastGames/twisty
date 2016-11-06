@@ -10,6 +10,8 @@ import android.graphics.Color;
 import android.util.Log;
 import android.widget.LinearLayout;
 
+import com.google.code.twisty.EasyGlobalsA;
+
 
 /**
  * GlkLayout is a ViewGroup responsible for display of GlkWindows.
@@ -97,21 +99,28 @@ public class GlkLayout extends LinearLayout {
 		// TODO(gmadrid-refactor): fix this when you move to multi windows.
 		Log.d(TAG, "No child windows yet. SKIPPING. direction " + direction + " sizeMethod " + sizeMethod + " size " + size + " winType " + winType + " id " + id);
 
-
-		if (splitWin == null) {
-			// If there is no root window, create one.
-			Log.w(TAG, "makeNewWindow found no RootWindow, is returning NewRootWindow");
-			return makeNewRootWindow(winType, id);
+		if (EasyGlobalsA.openWindowLogicTrialA) {
+			if (splitWin == null) {
+				// If there is no root window, create one.
+				Log.w(TAG, "makeNewWindow found no RootWindow, is returning NewRootWindow");
+				return makeNewRootWindow(winType, id);
+			} else {
+				// return doLayoutTry1(splitWin, winType, id);
+				return doLayoutTry2(splitWin, winType, id);
+			}
 		}
 		else
 		{
-			// return doLayoutTry1(splitWin, winType, id);
-			return doLayoutTry2(splitWin, winType, id);
-		}
+			if (splitWin == null) {
+				return makeNewRootWindow(winType, id);
+			}
 
-		// return new GlkWindow[] { null, null };
-		//return splitWin.makeNewChildWindow(direction, sizeMethod,
+			// TODO(gmadrid-refactor): fix this when you move to multi windows.
+			Log.d(TAG, "No child windows yet. SKIPPING.");
+			return new GlkWindow[] { null, null };
+			//return splitWin.makeNewChildWindow(direction, sizeMethod,
 			//	size, winType, id);
+		}
 	}
 
 	private GlkWindow[] doLayoutTry2(GlkWindow splitWin, GlkWinType winType, final int id)
