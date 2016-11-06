@@ -276,12 +276,6 @@ public class Twisty extends AppCompatActivity {
 	
 	private void printWelcomeMessage() {
 		// What version of Twisty is running?
-		PackageInfo pkginfo = null;
-		try {
-			pkginfo = this.getPackageManager().getPackageInfo("com.google.code.twisty", 0);
-		} catch (PackageManager.NameNotFoundException e) {
-			Log.e(TAG, "Couldn't determine Twisty version.");
-		}
 
 		StringBuffer battstate = new StringBuffer();
 		appendBatteryState(battstate);
@@ -289,7 +283,7 @@ public class Twisty extends AppCompatActivity {
 		mainWin.doStyle(GlkStyle.Normal);
 		
 		mainWin.doReverseVideo(true);
-		mainWin.doPrint("Twisty " + pkginfo.versionName + "\nOpen-source software (C) Google Inc.\n\n\n");
+		mainWin.doPrint("Twisty " + BuildConfig.APPLICATION_ID + " " + BuildConfig.VERSION_NAME + "\nOpen-source software (C) Google Inc.\n\n\n");
 		mainWin.doReverseVideo(false);
 		mainWin.doPrint("You are holding a modern-looking mobile device which can be typed upon. ");
 		mainWin.doPrint(battstate.toString() + " ");
@@ -828,6 +822,8 @@ public class Twisty extends AppCompatActivity {
 		scanDir(extraDir4, zgamelist);
 		File extraDir5 = new File("/sdcard/Download");
 		scanDir(extraDir5, zgamelist);
+		File extraDir6 = new File("/sdcard/storyGames_ZM_0");
+		scanDir(extraDir6, zgamelist);
 
 		// Grafted logic in from Son of Hunkypunk Experimental
 		if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.KITKAT) {
