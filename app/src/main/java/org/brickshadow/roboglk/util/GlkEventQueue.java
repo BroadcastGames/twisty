@@ -28,6 +28,7 @@ import org.brickshadow.roboglk.GlkSChannel;
 import org.brickshadow.roboglk.GlkWindow;
 
 import android.os.Message;
+import android.util.Log;
 
 
 /**
@@ -297,13 +298,19 @@ public class GlkEventQueue {
     
     private void scheduleNextTimer() {
     	if (timerMillisecs == 0) {
+            Log.w("GlkEventQueue", "scheduleNextTimer got 0 timerMillisecs, doing nothing.");
     		return;
     	}
-    	timer.schedule(new TimerTask() {
-			@Override
-			public void run() {
-				GlkEventQueue.this.putEvent(GlkEventQueue.newTimerEvent());
-			}
-		}, timerMillisecs);
+        // This fixes a crash testing story "Alpha.z5"
+        try {
+            timer.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    GlkEventQueue.this.putEvent(GlkEventQueue.newTimerEvent());
+                }
+            }, timerMillisecs);
+        } catch (Exception e) {
+            Log.e("", "Exception scheduleNextTimer", e);
+        }
     }
 }
