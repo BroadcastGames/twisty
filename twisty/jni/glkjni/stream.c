@@ -532,9 +532,13 @@ void glk_put_char_stream_uni(stream_t *str, glui32 ch)
 
 void gli_put_buffer(stream_t *str, char *buf, glui32 len)
 {
+    LOGV("gli_put_buffer len %d", len);
+
     if (!str || !str->writable) {
         return;
     }
+
+    LOGV("gli_put_buffer len %d '%s' str_type %d", len, buf, str->type);
 
     str->writecount += len;
 

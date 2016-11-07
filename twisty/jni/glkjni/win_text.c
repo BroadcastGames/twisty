@@ -147,6 +147,8 @@ static void gli_window_buffer_char(window_t *win, glui32 ch)
 
 void gli_window_write(window_t *win, char *buf, glui32 len)
 {
+    LOGV("win_text.c gli_window_write len %d", len);
+
     glui32 i;
 
     if (!win->text) {
@@ -158,14 +160,20 @@ void gli_window_write(window_t *win, char *buf, glui32 len)
         return;
     }
 
+    LOGV("win_text.c gli_window_write len %d CHECKPOINT_A", len);
+
     for (i = 0; i < len; i++) {
-        LOGV("win_txt.c gli_window_write calling gli_window_buffer_char with '%s' len %d", *buf, len);
+        LOGV("win_text.c gli_window_write len %d CHECKPOINT_B", len);
+        // LOG LINE CAUSES CRASH, *buf wrong. LOGV("win_txt.c gli_window_write calling gli_window_buffer_char with '%s' len %d", *buf, len);
         gli_window_buffer_char(win, (unsigned char)buf[i]);
     }
 
     if (win->echostr) {
+        LOGV("win_text.c gli_window_write len %d CHECKPOINT_C", len);
         gli_put_buffer(win->echostr, buf, len);
     }
+
+    LOGV("win_text.c gli_window_write len %d END", len);
 }
 
 void gli_window_write_uni(winid_t win, glui32 *buf, glui32 len)
