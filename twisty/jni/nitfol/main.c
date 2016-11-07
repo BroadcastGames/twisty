@@ -21,6 +21,8 @@
 
 #include "gi_blorb.h"
 
+#include <android/log.h>
+
 
 static void set_zfile(strid_t file)
 {
@@ -87,6 +89,8 @@ int game_use_file(strid_t file)
 
 void glk_main(void)
 {
+  __android_log_print(ANDROID_LOG_INFO   , "Twisty", "nitfol glk_main");
+
   if(!current_zfile)
   {
     winid_t tempwin;
