@@ -222,6 +222,7 @@ public abstract class GlkTextWindow extends GlkWindow {
 
 	@Override
 	public void getSize(int[] dim) {
+        Log.i("GlkTextWIndow.java", "getSize()");
 		int[] size = io.getWindowSize();
 		dim[0] = size[0];
 		dim[1] = size[1];
@@ -230,6 +231,7 @@ public abstract class GlkTextWindow extends GlkWindow {
 	@Override
 	public int getSizeFromConstraint(int constraint, boolean vertical,
 			int maxSize) {
+        Log.i("GlkTextWIndow.java", "getSizeFromConstraint()");
 
 		if (vertical) {
 			return io.getLinesSize(constraint, maxSize);

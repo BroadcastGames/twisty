@@ -77,6 +77,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.SparseArray;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -203,6 +204,16 @@ public class Twisty extends AppCompatActivity {
             twisty.get().gameIsRunning = false;
 			}
 		};
+
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		Log.i(TAG, "onKeydown " + keyCode);
+		if (keyCode == KeyEvent.KEYCODE_G)
+		{
+			Log.i(TAG, "KeyEvent.KEYCODE_G");
+		}
+		return super.onKeyDown(keyCode, event);
+	}
 
 	/** Called when activity is first created. */
 	@Override
@@ -824,6 +835,8 @@ public class Twisty extends AppCompatActivity {
 		scanDir(extraDir5, zgamelist);
 		File extraDir6 = new File("/sdcard/storyGames_ZM_0");
 		scanDir(extraDir6, zgamelist);
+		File extraDir7 = new File("/sdcard/storyGames_TechTest0");
+		scanDir(extraDir7, zgamelist);
 
 		// Grafted logic in from Son of Hunkypunk Experimental
 		if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.KITKAT) {
